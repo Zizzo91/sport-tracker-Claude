@@ -12,9 +12,9 @@ class SportEventScraper:
         }
         self.today = datetime.now()
 
-        # Mapping canali corretti per competizione
+        # Mapping canali per competizione
         self.channels_by_competition = {
-            'serie_a': 'DAZN',  # Default, poi verifichiamo se anche Sky
+            'serie_a': 'DAZN',
             'serie_b': 'DAZN, LaB Channel (Prime Video)',
             'serie_c': 'Sky Sport',
             'serie_d': 'ReggioTV',
@@ -31,7 +31,7 @@ class SportEventScraper:
     def scrape_oasport(self):
         """Scrape da OASport.it"""
         try:
-            for i in range(-1, 5):  # Da ieri a +4 giorni
+            for i in range(-1, 7):  # Da ieri a +6 giorni (per coprire più eventi)
                 date = self.today + timedelta(days=i)
                 day_name = self.get_italian_day_name(date.weekday())
                 month_name = self.get_italian_month_name(date.month)
@@ -52,26 +52,85 @@ class SportEventScraper:
         except Exception as e:
             print(f"Errore scraping OASport: {e}")
 
-    def scrape_serie_a_calendar(self):
-        """Integra con calendario Serie A per avere orari e canali precisi"""
-        print("\n🔍 Integro con fonti Serie A...")
-
-        # Qui potresti aggiungere scraping da:
-        # - https://www.legaseriea.it
-        # - https://sport.sky.it/calcio/serie-a
-        # Per ora uso logica intelligente
-
     def scrape_serie_b_calendar(self):
-        """Integra calendario Serie B"""
-        print("\n🔍 Cerco partite Serie B...")
+        """
+        INTEGRAZIONE SERIE B - Cerca partite specifiche
+        Questo metodo cerca attivamente le partite di Monza e Catanzaro
+        """
+        print("\n🔍 Cerco partite Serie B (Monza e Catanzaro)...")
 
-        # Lista partite Serie B con Catanzaro (da aggiornare manualmente o via API)
-        # Per automazione futura, si potrebbe scrapare da:
-        # - https://www.legab.it
-        # - https://www.dazn.com/it-IT/l/calcio/serie-b/
+        # URL calendario Serie B (può essere scrapato da legab.it o altri siti)
+        # Per ora uso logica manuale + cerca su OASport
+
+        teams_to_track = ['monza', 'catanzaro']
+
+        # Cerca nelle prossime 2 settimane
+        for i in range(0, 14):
+            date = self.today + timedelta(days=i)
+            date_str = date.strftime('%Y-%m-%d')
+
+            # Logica: ogni weekend ci sono partite di Serie B
+            # Sabato e domenica ore 15:00, 17:15, 20:30
+            if date.weekday() in [5, 6]:  # Sabato=5, Domenica=6
+                # Qui potresti fare scraping specifico da altri siti
+                # oppure usare una API se disponibile
+                pass
+
+        print("  ℹ️  Per partite Serie B non trovate automaticamente,")
+        print("      aggiungile manualmente in add_manual_events()")
+
+    def add_special_events(self):
+        """
+        NUOVA FUNZIONE: Eventi speciali (sorteggi, test, shakedown)
+        """
+        print("\n📅 Aggiungo eventi speciali...")
+
+        # SORTEGGI Champions/Europa/Conference League
+        special_events = [
+            # Formato: (data, ora, evento, competizione, canale, note)
+            ('2026-01-30', '12:00', 'Sorteggio Playoff Champions League', 'Champions League', 'Sky Sport, streaming UEFA.com', 'Sorteggio'),
+            ('2026-01-30', '13:00', 'Sorteggio Playoff Europa League', 'Europa League', 'Sky Sport, streaming UEFA.com', 'Sorteggio'),
+            ('2026-01-30', '14:00', 'Sorteggio Playoff Conference League', 'Conference League', 'Sky Sport, streaming UEFA.com', 'Sorteggio'),
+
+            # TEST F1/MotoGP (anche se non in TV, li tracciamo)
+            # ('2026-02-05', '10:00', 'Test F1 Barcellona - Giorno 1', 'Formula 1 - Test', 'Non trasmesso', 'Test a porte chiuse'),
+        ]
+
+        for date, time, event, competition, channel, notes in special_events:
+            if date not in self.events:
+                self.events[date] = []
+
+            evt = {
+                'time': time,
+                'event': event,
+                'competition': competition,
+                'sport': self.detect_sport_from_competition(competition),
+                'channel': channel,
+                'notes': notes,
+                'highlight': True  # Eventi speciali sempre evidenziati
+            }
+
+            if not self.is_duplicate(self.events[date], evt):
+                self.events[date].append(evt)
+                print(f"  ✅ {date} {time} - {event}")
+
+    def detect_sport_from_competition(self, competition):
+        """Rileva sport dalla competizione"""
+        comp_lower = competition.lower()
+        if 'champions' in comp_lower or 'europa' in comp_lower or 'conference' in comp_lower or 'calcio' in comp_lower:
+            return 'calcio'
+        elif 'formula 1' in comp_lower or 'f1' in comp_lower:
+            return 'f1'
+        elif 'motogp' in comp_lower:
+            return 'motogp'
+        elif 'tennis' in comp_lower:
+            return 'tennis'
+        elif 'sci' in comp_lower:
+            return 'sci'
+        return 'altro'
 
     def parse_oasport_content(self, soup, target_date):
-        """Analizza contenuto OASport con logica migliorata"""
+        """Analizza contenuto OASport con riconoscimento canali specifici"""
         date_str = target_date.strftime('%Y-%m-%d')
 
         if date_str not in self.events:
@@ -93,8 +152,12 @@ class SportEventScraper:
             'cagliari', 'verona', 'como', 'lecce', 'parma', 'cremonese',
             'sinner', 'paolini', 'berrettini', 'musetti', 'darderi', 'sonego', 'arnaldi',
             'brignone', 'goggia', 'paris', 'de aliprandini',
-            'monza', 'catanzaro', 'reggina', 'pisa', 'sassuolo'
+            'monza', 'catanzaro', 'reggina', 'pisa', 'sassuolo',
+            # Aggiungi altri nomi se necessario
         ]
+
+        # NUOVA KEYWORD per eventi speciali
+        special_keywords = ['sorteggio', 'sorteggi', 'test', 'shakedown', 'prove libere']
 
         time_pattern = r'(?:ore\s+)?(\d{1,2})[:\.](\d{2})'
 
@@ -112,14 +175,15 @@ class SportEventScraper:
                 minute = int(time_match.group(2))
                 time = f"{hour:02d}:{minute:02d}"
 
-                # Verifica se contiene italiani
+                # Verifica se contiene italiani o eventi speciali
                 is_italian = any(keyword in line_lower for keyword in italian_keywords)
+                is_special = any(keyword in line_lower for keyword in special_keywords)
 
                 # Determina sport e competizione
                 sport_type = self.detect_sport(line_lower)
                 competition_key = self.detect_competition_key(line_lower, sport_type)
 
-                if sport_type and (is_italian or sport_type in ['f1', 'motogp']):
+                if sport_type and (is_italian or is_special or sport_type in ['f1', 'motogp']):
                     # Determina data corretta
                     actual_date = date_str
                     if hour < 6 and self.today.hour >= 18:
@@ -133,8 +197,11 @@ class SportEventScraper:
                     # Estrai nome evento
                     event_name = self.clean_event_name(line_clean, time)
 
-                    # Determina canale corretto
-                    channel = self.get_correct_channel(sport_type, competition_key, line_clean, event_name)
+                    # *** MODIFICA CHIAVE: Estrai canale SPECIFICO ***
+                    channel = self.extract_specific_channel(line_clean, sport_type, competition_key, event_name)
+
+                    # Determina se è un evento non in TV
+                    is_not_on_tv = 'non trasmesso' in line_lower or 'porte chiuse' in line_lower or 'non in tv' in line_lower
 
                     # Crea evento
                     event = {
@@ -142,9 +209,9 @@ class SportEventScraper:
                         'event': event_name,
                         'competition': self.get_competition_name(line_lower, sport_type),
                         'sport': sport_type,
-                        'channel': channel,
+                        'channel': channel if not is_not_on_tv else 'Non trasmesso',
                         'notes': self.extract_notes(line_lower, line_clean),
-                        'highlight': is_italian
+                        'highlight': is_italian or is_special
                     }
 
                     # Evita duplicati
@@ -152,8 +219,232 @@ class SportEventScraper:
                         self.events[actual_date].append(event)
                         print(f"  ✅ {actual_date} {time} - {event_name[:50]}")
 
+    def extract_specific_channel(self, text, sport, competition_key, event_name):
+        """
+        NUOVA FUNZIONE: Estrae canale TV SPECIFICO
+        Cerca Sky Sport Uno, Sky Sport Calcio, Sky Sport 251, ecc.
+        """
+        text_lower = text.lower()
+
+        # Serie B: sempre uguale
+        if competition_key == 'serie_b':
+            return 'DAZN, LaB Channel (Prime Video)'
+
+        # Serie D Reggina
+        if competition_key == 'serie_d' and 'reggina' in event_name.lower():
+            return 'ReggioTV'
+
+        # Champions/Europa/Conference: cerca canale Sky specifico
+        if competition_key in ['champions', 'europa', 'conference']:
+            # Cerca pattern: "Sky Sport Uno", "Sky Sport 251", ecc.
+
+            # Pattern 1: Sky Sport Uno/Calcio/Arena/ecc.
+            sky_named = re.search(r'sky sport\s+(uno|calcio|arena|24|serie a|football)', text_lower)
+            if sky_named:
+                name = sky_named.group(1).capitalize()
+                if name == 'Uno':
+                    base_channel = 'Sky Sport Uno'
+                elif name == 'Calcio':
+                    base_channel = 'Sky Sport Calcio'
+                elif name == 'Arena':
+                    base_channel = 'Sky Sport Arena'
+                elif name == '24':
+                    base_channel = 'Sky Sport 24'
+                else:
+                    base_channel = f'Sky Sport {name.title()}'
+            else:
+                base_channel = 'Sky Sport'
+
+            # Pattern 2: Sky Sport + numero (251, 252, ecc.)
+            sky_numbered = re.search(r'sky sport\s+(\d{3})', text_lower)
+            if sky_numbered:
+                num = sky_numbered.group(1)
+                base_channel = f'Sky Sport {num}'
+
+            # Cerca Diretta Gol
+            diretta_gol = re.search(r'diretta gol.*?sky sport\s*(\d{3})', text_lower)
+            if diretta_gol:
+                # Non sovrascrivere base_channel, lo aggiungiamo nelle note
+                pass
+
+            return base_channel
+
+        # Serie A: DAZN vs DAZN+Sky
+        if competition_key == 'serie_a':
+            has_sky = 'sky' in text_lower
+            has_dazn = 'dazn' in text_lower
+
+            if has_sky:
+                # Cerca canale Sky specifico
+                sky_named = re.search(r'sky sport\s+(uno|calcio|arena)', text_lower)
+                if sky_named:
+                    name = sky_named.group(1)
+                    if name == 'uno':
+                        return 'DAZN, Sky Sport Uno'
+                    elif name == 'calcio':
+                        return 'DAZN, Sky Sport Calcio'
+                    else:
+                        return f'DAZN, Sky Sport {name.title()}'
+                else:
+                    return 'DAZN, Sky Sport'
+            else:
+                return 'DAZN'
+
+        # F1
+        if sport == 'f1':
+            return 'Sky Sport F1'
+
+        # MotoGP
+        if sport == 'motogp':
+            return 'Sky Sport MotoGP'
+
+        # Tennis
+        if sport == 'tennis':
+            has_eurosport = 'eurosport' in text_lower
+            has_discovery = 'discovery' in text_lower
+            if has_eurosport and has_discovery:
+                return 'Eurosport, discovery+'
+            elif has_eurosport:
+                if 'eurosport 2' in text_lower:
+                    return 'Eurosport 2'
+                elif 'eurosport 1' in text_lower:
+                    return 'Eurosport 1'
+                return 'Eurosport'
+            return 'Eurosport, discovery+'
+
+        # Sci
+        if sport == 'sci':
+            has_eurosport = 'eurosport' in text_lower
+            has_rai = 'rai' in text_lower
+            if has_eurosport and has_rai:
+                if 'eurosport 2' in text_lower:
+                    return 'Eurosport 2, RaiSport'
+                return 'Eurosport, RaiSport'
+            elif has_eurosport:
+                return 'Eurosport 2'
+            elif has_rai:
+                return 'RaiSport'
+            return 'Eurosport 2, RaiSport'
+
+        # Fallback: estrai dal testo
+        return self.extract_channel_from_text(text) or 'Da verificare'
+
+    def extract_channel_from_text(self, text):
+        """Estrae canale dal testo (fallback)"""
+        text_lower = text.lower()
+
+        # Cerca canali specifici con priorità
+        patterns = [
+            (r'sky sport uno', 'Sky Sport Uno'),
+            (r'sky sport calcio', 'Sky Sport Calcio'),
+            (r'sky sport arena', 'Sky Sport Arena'),
+            (r'sky sport (\d{3})', lambda m: f'Sky Sport {m.group(1)}'),
+            (r'sky sport 24', 'Sky Sport 24'),
+            (r'sky sport f1', 'Sky Sport F1'),
+            (r'sky sport motogp', 'Sky Sport MotoGP'),
+            (r'sky sport', 'Sky Sport'),
+            (r'dazn', 'DAZN'),
+            (r'prime video', 'Prime Video'),
+            (r'eurosport 2', 'Eurosport 2'),
+            (r'eurosport 1', 'Eurosport 1'),
+            (r'eurosport', 'Eurosport'),
+            (r'discovery\+|discovery plus', 'discovery+'),
+            (r'raisport|rai sport', 'RaiSport'),
+            (r'tv8', 'TV8'),
+        ]
+
+        for pattern, replacement in patterns:
+            match = re.search(pattern, text_lower)
+            if match:
+                if callable(replacement):
+                    return replacement(match)
+                return replacement
+
+        return ''
+
+    def add_manual_events(self):
+        """
+        EVENTI MANUALI - Qui aggiungi partite che lo scraper potrebbe non trovare
+        """
+        print("\n📝 Aggiungo eventi manuali...")
+
+        # *** PARTITE SERIE B CATANZARO ***
+        # Aggiorna questa lista ogni settimana con le prossime partite
+        manual_serie_b_catanzaro = [
+            ('2026-01-31', '15:00', 'Südtirol', 'Catanzaro'),
+            # ('2026-02-07', '15:00', 'Catanzaro', 'Bari'),
+            # ('2026-02-14', '20:30', 'Spezia', 'Catanzaro'),
+            # Aggiungi qui le prossime partite del Catanzaro
+        ]
+
+        for date, time, home, away in manual_serie_b_catanzaro:
+            if date not in self.events:
+                self.events[date] = []
+
+            event = {
+                'time': time,
+                'event': f'{home} - {away}',
+                'competition': 'Serie B',
+                'sport': 'calcio',
+                'channel': self.channels_by_competition['serie_b'],
+                'notes': '',
+                'highlight': True
+            }
+
+            if not self.is_duplicate(self.events[date], event):
+                self.events[date].append(event)
+                print(f"  ✅ Serie B: {date} {time} - {home} - {away}")
+
+        # *** PARTITE SERIE B MONZA *** (se Monza è in Serie B)
+        manual_serie_b_monza = [
+            # ('2026-02-08', '15:00', 'Monza', 'Palermo'),
+            # Aggiungi qui se necessario
+        ]
+
+        for date, time, home, away in manual_serie_b_monza:
+            if date not in self.events:
+                self.events[date] = []
+
+            event = {
+                'time': time,
+                'event': f'{home} - {away}',
+                'competition': 'Serie B',
+                'sport': 'calcio',
+                'channel': self.channels_by_competition['serie_b'],
+                'notes': '',
+                'highlight': True
+            }
+
+            if not self.is_duplicate(self.events[date], event):
+                self.events[date].append(event)
+                print(f"  ✅ Serie B: {date} {time} - {home} - {away}")
+
+        # *** SERIE D REGGINA TRASFERTE ***
+        manual_serie_d_reggina = [
+            # ('2026-02-09', '14:30', 'Acireale', 'Reggina'),
+            # Aggiungi qui le prossime trasferte
+        ]
+
+        for date, time, home, away in manual_serie_d_reggina:
+            if date not in self.events:
+                self.events[date] = []
+
+            event = {
+                'time': time,
+                'event': f'{home} - {away}',
+                'competition': 'Serie D - Girone I',
+                'sport': 'calcio',
+                'channel': 'ReggioTV',
+                'notes': 'Trasferta Reggina',
+                'highlight': True
+            }
+
+            if not self.is_duplicate(self.events[date], event):
+                self.events[date].append(event)
+                print(f"  ✅ Serie D: {date} {time} - {home} - {away}")
+
     def detect_competition_key(self, text, sport):
-        """Rileva la chiave della competizione per assegnare il canale corretto"""
+        """Rileva la chiave della competizione"""
         if sport == 'calcio':
             if 'serie a' in text and 'serie b' not in text:
                 return 'serie_a'
@@ -182,127 +473,6 @@ class SportEventScraper:
 
         return None
 
-    def get_correct_channel(self, sport, competition_key, text_original, event_name):
-        """Determina il canale TV corretto basandosi su competizione e logica"""
-
-        # Serie B: sempre DAZN + Prime Video
-        if competition_key == 'serie_b':
-            return self.channels_by_competition['serie_b']
-
-        # Serie D: ReggioTV per Reggina
-        if competition_key == 'serie_d':
-            if 'reggina' in event_name.lower():
-                return 'ReggioTV'
-
-        # Champions, Europa, Conference: Sky
-        if competition_key in ['champions', 'europa', 'conference']:
-            # Cerca numero canale Sky
-            sky_match = re.search(r'sky sport\s*(uno|calcio|\d{3})', text_original.lower())
-            if sky_match:
-                num = sky_match.group(1)
-                if num.isdigit():
-                    base_channel = f'Sky Sport {num}'
-                elif num == 'uno':
-                    base_channel = 'Sky Sport Uno'
-                else:
-                    base_channel = 'Sky Sport'
-            else:
-                base_channel = 'Sky Sport'
-
-            # Aggiungi diretta gol se menzionata
-            if 'diretta gol' in text_original.lower():
-                dg_match = re.search(r'diretta gol.*?(\d{3})', text_original.lower())
-                if dg_match:
-                    return base_channel
-                else:
-                    return base_channel
-            return base_channel
-
-        # Serie A: logica DAZN vs DAZN+Sky
-        if competition_key == 'serie_a':
-            # Verifica se esplicitamente menziona Sky
-            has_sky = 'sky' in text_original.lower()
-            has_dazn = 'dazn' in text_original.lower()
-
-            if has_sky and has_dazn:
-                return 'DAZN, Sky Sport'
-            elif has_sky:
-                return 'DAZN, Sky Sport'  # Probabile co-esclusiva
-            else:
-                return 'DAZN'  # Default per Serie A
-
-        # Fallback al mapping standard
-        if competition_key and competition_key in self.channels_by_competition:
-            return self.channels_by_competition[competition_key]
-
-        # Ultima risorsa: estrai dal testo
-        return self.extract_channel_from_text(text_original) or 'Da verificare'
-
-    def extract_channel_from_text(self, text):
-        """Estrae canale dal testo (fallback)"""
-        text_lower = text.lower()
-
-        # Priorità a canali specifici
-        if 'sky sport uno' in text_lower:
-            return 'Sky Sport Uno'
-        elif 'sky sport calcio' in text_lower:
-            return 'Sky Sport Calcio'
-        elif re.search(r'sky sport\s*\d{3}', text_lower):
-            match = re.search(r'sky sport\s*(\d{3})', text_lower)
-            return f'Sky Sport {match.group(1)}'
-        elif 'sky sport' in text_lower:
-            return 'Sky Sport'
-        elif 'dazn' in text_lower:
-            return 'DAZN'
-        elif 'prime video' in text_lower:
-            return 'Prime Video'
-        elif 'eurosport 2' in text_lower:
-            return 'Eurosport 2'
-        elif 'eurosport' in text_lower:
-            return 'Eurosport'
-        elif 'discovery+' in text_lower or 'discovery plus' in text_lower:
-            return 'discovery+'
-        elif 'raisport' in text_lower or 'rai sport' in text_lower:
-            return 'RaiSport'
-        elif 'tv8' in text_lower:
-            return 'TV8'
-
-        return ''
-
-    def add_manual_events(self):
-        """Aggiungi eventi che potrebbero mancare dallo scraping"""
-        print("\n📝 Aggiungo eventi manuali di sicurezza...")
-
-        # Partite Serie A conosciute (aggiorna settimanalmente)
-        manual_serie_a = [
-            # Formato: (data, ora, squadra1, squadra2, canale)
-            # Lascia vuoto o aggiorna manualmente
-        ]
-
-        # Partite Serie B con Catanzaro
-        manual_serie_b_catanzaro = [
-            # ('2026-01-31', '15:00', 'Südtirol', 'Catanzaro'),
-            # Aggiungi qui le prossime partite del Catanzaro
-        ]
-
-        for date, time, home, away in manual_serie_b_catanzaro:
-            if date not in self.events:
-                self.events[date] = []
-
-            event = {
-                'time': time,
-                'event': f'{home} - {away}',
-                'competition': 'Serie B',
-                'sport': 'calcio',
-                'channel': self.channels_by_competition['serie_b'],
-                'notes': '',
-                'highlight': True
-            }
-
-            if not self.is_duplicate(self.events[date], event):
-                self.events[date].append(event)
-                print(f"  ✅ Aggiunto: {date} {time} - {home} - {away}")
-
     def is_duplicate(self, events_list, new_event):
         """Controlla duplicati"""
         for existing in events_list:
@@ -313,11 +483,8 @@ class SportEventScraper:
 
     def similar_events(self, event1, event2):
         """Verifica se due eventi sono simili"""
-        # Normalizza
         e1 = event1.lower().replace('-', '').replace('vs', '').strip()[:40]
         e2 = event2.lower().replace('-', '').replace('vs', '').strip()[:40]
-
-        # Calcola similarità semplice
         return e1 == e2 or e1 in e2 or e2 in e1
 
     def get_italian_day_name(self, weekday):
@@ -330,7 +497,7 @@ class SportEventScraper:
         return months[month - 1]
 
     def detect_sport(self, text):
-        if any(word in text for word in ['calcio', 'serie a', 'serie b', 'champions', 'europa league', 'conference']):
+        if any(word in text for word in ['calcio', 'serie a', 'serie b', 'champions', 'europa league', 'conference', 'sorteggio']):
             return 'calcio'
         elif any(word in text for word in ['tennis', 'atp', 'wta', 'australian open', 'roland garros', 'wimbledon', 'us open']):
             return 'tennis'
@@ -346,6 +513,13 @@ class SportEventScraper:
 
     def get_competition_name(self, text, sport):
         if sport == 'calcio':
+            if 'sorteggio' in text:
+                if 'champions' in text:
+                    return 'Champions League - Sorteggio'
+                elif 'europa league' in text:
+                    return 'Europa League - Sorteggio'
+                elif 'conference' in text:
+                    return 'Conference League - Sorteggio'
             if 'champions' in text:
                 return 'Champions League'
             elif 'europa league' in text:
@@ -353,7 +527,6 @@ class SportEventScraper:
             elif 'conference' in text:
                 return 'Conference League'
             elif 'serie a' in text and 'serie b' not in text:
-                # Prova a estrarre giornata
                 giornata_match = re.search(r'(\d+)[ªa°]\s*giornata', text)
                 if giornata_match:
                     return f'Serie A - {giornata_match.group(1)}ª giornata'
@@ -369,18 +542,16 @@ class SportEventScraper:
         elif sport == 'tennis':
             if 'australian open' in text:
                 return 'Australian Open'
-            elif 'semifinale' in text or 'semifinali' in text:
-                return 'Australian Open'
-            elif 'finale' in text:
-                return 'Australian Open'
             return 'Tennis ATP/WTA'
         elif sport == 'sci':
             return 'Sci Alpino - Coppa del Mondo'
         elif sport == 'f1':
             if 'test' in text:
                 return 'Formula 1 - Test'
-            elif 'prove' in text:
-                return 'Formula 1 - Prove'
+            elif 'shakedown' in text or 'filming day' in text:
+                return 'Formula 1 - Shakedown'
+            elif 'prove libere' in text or 'prove' in text:
+                return 'Formula 1 - Prove Libere'
             elif 'qualifiche' in text:
                 return 'Formula 1 - Qualifiche'
             elif 'gara' in text or 'gran premio' in text:
@@ -389,6 +560,8 @@ class SportEventScraper:
         elif sport == 'motogp':
             if 'test' in text:
                 return 'MotoGP - Test'
+            elif 'shakedown' in text:
+                return 'MotoGP - Shakedown'
             return 'MotoGP'
         elif sport == 'volley':
             return 'Volley'
@@ -397,15 +570,19 @@ class SportEventScraper:
     def extract_notes(self, text_lower, text_original):
         notes = []
 
-        # Diretta gol
-        dg_match = re.search(r'diretta gol.*?(?:sky sport\s*)?(\d{3})', text_lower)
+        # Diretta gol con numero canale
+        dg_match = re.search(r'diretta gol.*?sky sport\s*(\d{3})', text_lower)
         if dg_match:
             notes.append(f'Diretta Gol: Sky Sport {dg_match.group(1)}')
         elif 'diretta gol' in text_lower:
             notes.append('Diretta Gol disponibile')
 
+        # Sorteggio
+        if 'sorteggio' in text_lower:
+            notes.append('Sorteggio')
+
         # Semifinale/Finale
-        if 'semifinale' in text_lower:
+        if 'semifinale' in text_lower or 'semifinali' in text_lower:
             notes.append('Semifinale')
         elif 'finale' in text_lower and 'semifinale' not in text_lower:
             notes.append('Finale')
@@ -415,11 +592,19 @@ class SportEventScraper:
         if prova_match:
             notes.append(f'{prova_match.group(1)}ª prova')
 
+        # Test/Shakedown
+        if 'test' in text_lower and 'contest' not in text_lower:
+            notes.append('Test')
+        if 'shakedown' in text_lower:
+            notes.append('Shakedown')
+        if 'porte chiuse' in text_lower or 'non trasmesso' in text_lower:
+            notes.append('Non in TV')
+
         # Differita
         if 'differita' in text_lower:
             notes.append('In differita')
 
-        # Luogo per eventi fuori casa
+        # Trasferta
         if 'trasferta' in text_lower:
             notes.append('Trasferta')
 
@@ -431,7 +616,7 @@ class SportEventScraper:
         text = re.sub(r'ore\s+', '', text, flags=re.IGNORECASE)
 
         # Rimuovi canali
-        text = re.sub(r'Sky Sport.*?(?=\s|$)', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'Sky Sport.*?(?=\s|\||$)', '', text, flags=re.IGNORECASE)
         text = re.sub(r'DAZN|Prime Video|Eurosport|RaiSport|TV8|discovery\+|LaB Channel', '', text, flags=re.IGNORECASE)
 
         # Rimuovi parole comuni
@@ -457,12 +642,15 @@ class SportEventScraper:
 
                 # Calcio
                 if sport == 'calcio':
-                    if 'serie a' in comp:
+                    # Sorteggi: sempre inclusi
+                    if 'sorteggio' in comp or 'sorteggio' in ev_name:
+                        should_include = True
+                    elif 'serie a' in comp:
                         should_include = True
                     elif 'champions' in comp or 'europa' in comp or 'conference' in comp:
                         italian_teams = ['inter', 'milan', 'juventus', 'juve', 'roma', 'napoli', 
                                        'lazio', 'atalanta', 'bologna', 'fiorentina']
-                        should_include = any(team in ev_name for team in italian_teams)
+                        should_include = any(team in ev_name for team in italian_teams) or 'sorteggio' in ev_name
                     elif 'serie b' in comp:
                         should_include = 'monza' in ev_name or 'catanzaro' in ev_name
                     elif 'serie d' in comp:
@@ -474,7 +662,7 @@ class SportEventScraper:
                                      'darderi', 'sonego', 'arnaldi', 'italia']
                     should_include = any(player in ev_name for player in italian_players)
 
-                # F1 e MotoGP
+                # F1 e MotoGP: SEMPRE inclusi (anche test/shakedown)
                 elif sport in ['f1', 'motogp']:
                     should_include = True
 
@@ -517,7 +705,9 @@ def main():
 
     # Scraping
     scraper.scrape_oasport()
-    scraper.add_manual_events()
+    scraper.scrape_serie_b_calendar()
+    scraper.add_special_events()  # NUOVO: eventi speciali (sorteggi, test, ecc.)
+    scraper.add_manual_events()    # Eventi manuali (Catanzaro, Monza, Reggina)
 
     # Salva
     events = scraper.save_to_json('eventi.json')
@@ -525,7 +715,7 @@ def main():
     print(f"\n📊 Riepilogo:")
     for date, evs in events.items():
         print(f"\n  {date} ({len(evs)} eventi):")
-        for ev in evs[:5]:  # Primi 5
+        for ev in evs[:5]:
             highlight = "⭐" if ev['highlight'] else "  "
             print(f"    {highlight} {ev['time']} - {ev['event'][:45]:45} | {ev['channel']}")
 
