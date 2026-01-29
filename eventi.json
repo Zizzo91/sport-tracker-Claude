@@ -1,0 +1,80 @@
+{
+  "2026-01-29": [
+    {
+      "time": "09:30",
+      "event": "Sinner vs Avversario - Semifinale",
+      "competition": "Australian Open",
+      "sport": "tennis",
+      "channel": "Eurosport, discovery+",
+      "notes": "Semifinale maschile",
+      "highlight": true
+    },
+    {
+      "time": "11:00",
+      "event": "Brignone, Goggia - Discesa (2ª prova)",
+      "competition": "Sci Alpino - Coppa del Mondo",
+      "sport": "sci",
+      "channel": "Eurosport 2, RaiSport",
+      "notes": "Crans Montana",
+      "highlight": true
+    },
+    {
+      "time": "18:45",
+      "event": "Maccabi Tel Aviv - Bologna",
+      "competition": "Europa League",
+      "sport": "calcio",
+      "channel": "Sky Sport Uno",
+      "notes": "Diretta Gol: Sky Sport 251",
+      "highlight": true
+    },
+    {
+      "time": "21:00",
+      "event": "Panathinaikos - Roma",
+      "competition": "Europa League",
+      "sport": "calcio",
+      "channel": "Sky Sport, TV8 (differita)",
+      "notes": "Diretta Gol: Sky Sport 251",
+      "highlight": true
+    }
+  ],
+  "2026-01-30": [
+    {
+      "time": "10:00",
+      "event": "Brignone, Goggia - Discesa",
+      "competition": "Sci Alpino - Coppa del Mondo",
+      "sport": "sci",
+      "channel": "Eurosport 2, RaiSport",
+      "notes": "Crans Montana - Gara ufficiale",
+      "highlight": true
+    },
+    {
+      "time": "20:45",
+      "event": "Lazio - Genoa",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, Sky Sport Calcio",
+      "notes": "",
+      "highlight": true
+    }
+  ],
+  "2026-01-31": [
+    {
+      "time": "11:00",
+      "event": "Brignone, Goggia - Super-G",
+      "competition": "Sci Alpino - Coppa del Mondo",
+      "sport": "sci",
+      "channel": "Eurosport 2, RaiSport",
+      "notes": "Crans Montana",
+      "highlight": true
+    },
+    {
+      "time": "18:00",
+      "event": "Napoli - Fiorentina",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, Sky Sport Calcio",
+      "notes": "",
+      "highlight": true
+    }
+  ]
+}
