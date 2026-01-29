@@ -4,6 +4,10 @@ on:
   schedule:
     # Esegue alle 06:00 CET ogni giorno
     - cron: '0 5 * * *'
+    # Esegue alle 06:00 CET ogni giorno
+    - cron: '0 9 * * *'
+    # Esegue alle 06:00 CET ogni giorno
+    - cron: '0 11 * * *'
     # Esegue alle 18:00 CET ogni giorno
     - cron: '0 17 * * *'
 
