@@ -1,24 +1,6 @@
 {
   "2026-01-29": [
     {
-      "time": "09:30",
-      "event": "Sinner vs Avversario - Semifinale",
-      "competition": "Australian Open",
-      "sport": "tennis",
-      "channel": "Eurosport, discovery+",
-      "notes": "Semifinale maschile",
-      "highlight": true
-    },
-    {
-      "time": "11:00",
-      "event": "Brignone, Goggia - Discesa (2ª prova)",
-      "competition": "Sci Alpino - Coppa del Mondo",
-      "sport": "sci",
-      "channel": "Eurosport 2, RaiSport",
-      "notes": "Crans Montana",
-      "highlight": true
-    },
-    {
       "time": "18:45",
       "event": "Maccabi Tel Aviv - Bologna",
       "competition": "Europa League",
@@ -39,12 +21,21 @@
   ],
   "2026-01-30": [
     {
-      "time": "10:00",
-      "event": "Brignone, Goggia - Discesa",
+      "time": "09:30",
+      "event": "Sinner vs Avversario - Semifinale",
+      "competition": "Australian Open",
+      "sport": "tennis",
+      "channel": "Eurosport, discovery+",
+      "notes": "Semifinale maschile",
+      "highlight": true
+    },
+    {
+      "time": "11:00",
+      "event": "Brignone, Goggia - Discesa (2ª prova)",
       "competition": "Sci Alpino - Coppa del Mondo",
       "sport": "sci",
       "channel": "Eurosport 2, RaiSport",
-      "notes": "Crans Montana - Gara ufficiale",
+      "notes": "Crans Montana",
       "highlight": true
     },
     {
@@ -75,6 +66,15 @@
       "channel": "DAZN, Sky Sport Calcio",
       "notes": "",
       "highlight": true
+    },
+    {
+      "time": "20:45",
+      "event": "Cagliari - Verona",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, Sky Sport",
+      "notes": "",
+      "highlight": false
     }
   ]
 }
