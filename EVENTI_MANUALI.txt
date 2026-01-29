@@ -1,0 +1,65 @@
+# 📝 EVENTI MANUALI - Configurazione
+# ===================================
+# 
+# Questo file contiene eventi da aggiungere manualmente se lo scraper non li trova.
+# Modifica questo file per aggiungere partite mancanti.
+#
+# FORMATO JSON (copia e incolla nel file Python se preferisci)
+
+{
+  "serie_b_catanzaro": [
+    {
+      "date": "2026-01-31",
+      "time": "15:00",
+      "home": "Südtirol",
+      "away": "Catanzaro",
+      "channel": "DAZN, LaB Channel (Prime Video)"
+    },
+    {
+      "date": "2026-02-07",
+      "time": "15:00",
+      "home": "Catanzaro",
+      "away": "Bari",
+      "channel": "DAZN, LaB Channel (Prime Video)",
+      "notes": "Stadio Ceravolo"
+    }
+  ],
+
+  "serie_b_monza": [
+    {
+      "date": "2026-02-14",
+      "time": "20:30",
+      "home": "Monza",
+      "away": "Palermo",
+      "channel": "DAZN, LaB Channel (Prime Video)"
+    }
+  ],
+
+  "serie_d_reggina": [
+    {
+      "date": "2026-02-09",
+      "time": "14:30",
+      "home": "Acireale",
+      "away": "Reggina",
+      "channel": "ReggioTV",
+      "notes": "Trasferta"
+    }
+  ],
+
+  "serie_a_extra": [
+
+  ]
+}
+
+# ===================================
+# ISTRUZIONI:
+# ===================================
+# 
+# 1. Copia uno degli esempi sopra
+# 2. Modifica date, orari, squadre
+# 3. Il formato data è: YYYY-MM-DD
+# 4. Il formato orario è: HH:MM
+# 5. Per Catanzaro Serie B il canale è sempre: "DAZN, LaB Channel (Prime Video)"
+# 6. Per Reggina Serie D il canale è sempre: "ReggioTV"
+#
+# OPPURE: Modifica direttamente scrape_events.py nella funzione add_manual_events()

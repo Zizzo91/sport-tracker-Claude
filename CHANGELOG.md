@@ -1,45 +1,32 @@
-# 📝 CHANGELOG
 
-## [1.1.0] - 2026-01-29
 
-### 🔧 Fixed
-- **Date classification**: Eventi ora correttamente classificati in oggi/domani/dopodomani
-- Eventi mattutini (< 06:00) non più erroneamente classificati come "oggi"
-- Gestione corretta fusi orari per eventi internazionali (Australian Open, ecc.)
+## [1.2.0] - 2026-01-29
 
-### ✨ Added
-- Logica intelligente per rilevamento "oggi/domani" nel contesto articoli
-- Filtro automatico eventi rilevanti secondo criteri specificati
-- Prevenzione duplicati nel database eventi
-- Script di test automatico (`test_system.py`)
-- Documentazione troubleshooting completa (`TEST_E_DEBUG.md`)
+### 🚀 Major Update - Scraper Intelligente
 
-### 🔄 Improved
-- Parsing più accurato di canali TV (Sky Sport 251, 252, etc.)
-- Estrazione automatica competizioni e note
-- Gestione migliore delle sezioni sport negli articoli
-- Riconoscimento eventi con italiani (squadre/atleti)
+#### Fixed
+- **Canali TV errati**: Serie A distingue correttamente DAZN vs DAZN+Sky
+- **Serie B sempre corretta**: DAZN, LaB Channel (Prime Video)
+- **Partite mancanti**: Aggiunto sistema eventi manuali
 
-### 📚 Documentation
-- Aggiunta guida test e debug
-- Aggiornato README con changelog fix
-- Creato riepilogo miglioramenti
+#### Added
+- Riconoscimento intelligente canali per competizione
+- Mapping canali TV automatico (Serie A, B, Champions, ecc.)
+- Funzione `add_manual_events()` per integrare partite mancanti
+- Helper script `helper_add_events.py` per aggiunta rapida
+- Guida manutenzione settimanale completa
+- Template eventi manuali configurabili
 
----
+#### Improved
+- Logica Serie A: verifica testo per distinguere DAZN/Sky
+- Parsing competizioni più accurato (riconosce giornata)
+- Prevenzione duplicati con similarità eventi
+- Estrazione note migliorata (Diretta Gol, Semifinali, ecc.)
 
-## [1.0.0] - 2026-01-28
-
-### 🎉 Initial Release
-- Web app responsive per eventi sportivi
-- Scraping automatico da OASport
-- GitHub Actions per aggiornamento giornaliero
-- Filtri per giorno (Ieri/Oggi/Domani)
-- Design moderno con badge colorati per sport
-- Hosting su GitHub Pages
+#### Documentation
+- `GUIDA_MANUTENZIONE.md`: workflow settimanale
+- `NOTE_CANALI_TV.md`: regole diritti TV
+- `EVENTI_MANUALI.txt`: template configurazione
+- `RIEPILOGO_FINALE_v1.2.md`: panoramica completa
 
 ---
-
-*Versionamento: [Major.Minor.Patch]*
-- Major: Cambiamenti breaking o ristrutturazioni importanti
-- Minor: Nuove funzionalità compatibili
-- Patch: Bug fix e piccoli miglioramenti
