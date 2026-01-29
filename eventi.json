@@ -22,7 +22,7 @@
   "2026-01-30": [
     {
       "time": "09:30",
-      "event": "Sinner vs Avversario - Semifinale",
+      "event": "Sinner - Semifinale",
       "competition": "Australian Open",
       "sport": "tennis",
       "channel": "Eurosport, discovery+",
@@ -43,7 +43,7 @@
       "event": "Lazio - Genoa",
       "competition": "Serie A - 23ª giornata",
       "sport": "calcio",
-      "channel": "DAZN, Sky Sport Calcio",
+      "channel": "DAZN",
       "notes": "",
       "highlight": true
     }
@@ -59,11 +59,29 @@
       "highlight": true
     },
     {
+      "time": "15:00",
+      "event": "Pisa - Sassuolo",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN",
+      "notes": "",
+      "highlight": false
+    },
+    {
+      "time": "15:00",
+      "event": "Südtirol - Catanzaro",
+      "competition": "Serie B - 22ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, LaB Channel (Prime Video)",
+      "notes": "Stadio Druso, Bolzano",
+      "highlight": true
+    },
+    {
       "time": "18:00",
       "event": "Napoli - Fiorentina",
       "competition": "Serie A - 23ª giornata",
       "sport": "calcio",
-      "channel": "DAZN, Sky Sport Calcio",
+      "channel": "DAZN",
       "notes": "",
       "highlight": true
     },
@@ -75,6 +93,66 @@
       "channel": "DAZN, Sky Sport",
       "notes": "",
       "highlight": false
+    }
+  ],
+  "2026-02-01": [
+    {
+      "time": "12:30",
+      "event": "Torino - Lecce",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN",
+      "notes": "",
+      "highlight": false
+    },
+    {
+      "time": "15:00",
+      "event": "Como - Atalanta",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN",
+      "notes": "",
+      "highlight": false
+    },
+    {
+      "time": "18:00",
+      "event": "Cremonese - Inter",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, Sky Sport",
+      "notes": "",
+      "highlight": true
+    },
+    {
+      "time": "20:45",
+      "event": "Parma - Juventus",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN",
+      "notes": "",
+      "highlight": true
+    }
+  ],
+  "2026-02-02": [
+    {
+      "time": "20:45",
+      "event": "Udinese - Roma",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN, Sky Sport",
+      "notes": "",
+      "highlight": true
+    }
+  ],
+  "2026-02-03": [
+    {
+      "time": "20:45",
+      "event": "Bologna - Milan",
+      "competition": "Serie A - 23ª giornata",
+      "sport": "calcio",
+      "channel": "DAZN",
+      "notes": "",
+      "highlight": true
     }
   ]
 }
