@@ -4,9 +4,9 @@ on:
   schedule:
     # Esegue alle 06:00 CET ogni giorno
     - cron: '0 5 * * *'
-    # Esegue alle 06:00 CET ogni giorno
+    # Esegue alle 10:00 CET ogni giorno
     - cron: '0 9 * * *'
-    # Esegue alle 06:00 CET ogni giorno
+    # Esegue alle 12:00 CET ogni giorno
     - cron: '0 11 * * *'
     # Esegue alle 18:00 CET ogni giorno
     - cron: '0 17 * * *'
@@ -26,6 +26,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.TOKEN_ACTION }}
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -42,8 +44,10 @@ jobs:
           python scrape_events.py
 
       - name: Commit and push if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
         run: |
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'actions@github.com'
           git add eventi.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Auto-update eventi.json" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "🔄 Auto-update eventi.json" && git push https://x-access-token:${{ secrets.TOKEN_ACTION }}@github.com/${{ github.repository }}.git)
