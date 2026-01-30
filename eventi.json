@@ -1,156 +1,40 @@
 {
-  "2026-01-29": [
-    {
-      "time": "21:00",
-      "event": "Maccabi Tel Aviv - Bologna",
-      "competition": "Europa League - 8ª giornata",
-      "sport": "calcio",
-      "channel": "Sky Sport Uno, Sky Sport 253",
-      "notes": "Diretta Gol: Sky Sport 251",
-      "highlight": true
-    },
-    {
-      "time": "21:00",
-      "event": "Panathinaikos - Roma",
-      "competition": "Europa League - 8ª giornata",
-      "sport": "calcio",
-      "channel": "Sky Sport, TV8 (differita 23:30)",
-      "notes": "Diretta Gol: Sky Sport 251",
-      "highlight": true
-    }
-  ],
   "2026-01-30": [
     {
-      "time": "09:30",
-      "event": "Sinner - Semifinale",
-      "competition": "Australian Open",
-      "sport": "tennis",
-      "channel": "Eurosport, discovery+",
-      "notes": "Semifinale maschile",
-      "highlight": true
-    },
-    {
-      "time": "11:00",
-      "event": "Brignone, Goggia - Discesa (2ª prova)",
-      "competition": "Sci Alpino - Coppa del Mondo",
-      "sport": "sci",
-      "channel": "Eurosport 2, RaiSport",
-      "notes": "Crans Montana",
-      "highlight": true
-    },
-    {
-      "time": "20:45",
-      "event": "Lazio - Genoa",
-      "competition": "Serie A - 23ª giornata",
+      "time": "12:00",
+      "event": "Sorteggio Playoff Champions League",
+      "competition": "Champions League",
       "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
+      "channel": "Sky Sport, streaming UEFA.com",
+      "notes": "Sorteggio",
+      "highlight": true
+    },
+    {
+      "time": "13:00",
+      "event": "Sorteggio Playoff Europa League",
+      "competition": "Europa League",
+      "sport": "calcio",
+      "channel": "Sky Sport, streaming UEFA.com",
+      "notes": "Sorteggio",
+      "highlight": true
+    },
+    {
+      "time": "14:00",
+      "event": "Sorteggio Playoff Conference League",
+      "competition": "Conference League",
+      "sport": "calcio",
+      "channel": "Sky Sport, streaming UEFA.com",
+      "notes": "Sorteggio",
       "highlight": true
     }
   ],
   "2026-01-31": [
     {
-      "time": "11:00",
-      "event": "Brignone, Goggia - Super-G",
-      "competition": "Sci Alpino - Coppa del Mondo",
-      "sport": "sci",
-      "channel": "Eurosport 2, RaiSport",
-      "notes": "Crans Montana",
-      "highlight": true
-    },
-    {
-      "time": "15:00",
-      "event": "Pisa - Sassuolo",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
-      "highlight": false
-    },
-    {
       "time": "15:00",
       "event": "Südtirol - Catanzaro",
-      "competition": "Serie B - 22ª giornata",
+      "competition": "Serie B",
       "sport": "calcio",
       "channel": "DAZN, LaB Channel (Prime Video)",
-      "notes": "Stadio Druso, Bolzano",
-      "highlight": true
-    },
-    {
-      "time": "18:00",
-      "event": "Napoli - Fiorentina",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
-      "highlight": true
-    },
-    {
-      "time": "20:45",
-      "event": "Cagliari - Verona",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN, Sky Sport Calcio",
-      "notes": "",
-      "highlight": false
-    }
-  ],
-  "2026-02-01": [
-    {
-      "time": "12:30",
-      "event": "Torino - Lecce",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
-      "highlight": false
-    },
-    {
-      "time": "15:00",
-      "event": "Como - Atalanta",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
-      "highlight": false
-    },
-    {
-      "time": "18:00",
-      "event": "Cremonese - Inter",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN, Sky Sport Calcio",
-      "notes": "",
-      "highlight": true
-    },
-    {
-      "time": "20:45",
-      "event": "Parma - Juventus",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
-      "notes": "",
-      "highlight": true
-    }
-  ],
-  "2026-02-02": [
-    {
-      "time": "20:45",
-      "event": "Udinese - Roma",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN, Sky Sport Uno",
-      "notes": "",
-      "highlight": true
-    }
-  ],
-  "2026-02-03": [
-    {
-      "time": "20:45",
-      "event": "Bologna - Milan",
-      "competition": "Serie A - 23ª giornata",
-      "sport": "calcio",
-      "channel": "DAZN",
       "notes": "",
       "highlight": true
     }
